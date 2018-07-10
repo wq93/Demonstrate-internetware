@@ -1,0 +1,168 @@
+@import "./theme.less";
+@import "./mixin.less";
+body {
+  font-size: 14px;
+  color: @base-color;
+  line-height: 1;
+}
+
+h1, h2, h3, h4, h5 {
+  color: @title-color;
+}
+
+a {
+  font-size: 14px;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+ul, ol {
+  list-style-type: none;
+}
+
+/*********************************关于表格**********************************************/
+.ivu-table {
+  color: @base-color;
+  th {
+    color: @title-color;
+    font-weight: normal;
+  }
+}
+
+.ivu-table-cell {
+  padding-left: 0;
+  text-align: left;
+}
+
+td.ivu-table-expanded-cell {
+  padding: 15px 30px;
+  background: @tr-extend;
+  color: @breadcrumb;
+}
+
+.ivu-table-wrapper {
+  border: 0;
+  border-right: 0 transparent;
+}
+
+.ivu-table-cell-expand {
+  padding-top: 2px;
+
+  &.ivu-table-cell-expand-expanded {
+    #transform-rotate(0);
+  }
+  .ivu-icon{
+    background: @primary-color;
+    color: @color;
+    font-size: 12px;
+    width: 14px;
+    height: 14px;
+    text-align: center;
+    padding: 2px;
+  }
+}
+
+.ivu-table th {
+  background-color: transparent;
+  height:50px;
+}
+
+.ivu-table-cell {
+  padding: 0;
+  span {
+    font-size: 14px;
+    font-weight: normal;
+  }
+}
+
+.ivu-tabs .ivu-tabs-bar {
+  border-width: 0;
+}
+
+.ivu-table:before,
+.ivu-table:after {
+  height: 0;
+  width: 0;
+}
+
+.ivu-table tbody td {
+  border-bottom-width: 0px;
+}
+.ivu-table-row-highlight td,
+tr.ivu-table-row-hover td,
+tr.ivu-table-row-hover.ivu-table-row-highlight td{
+  background: @listHover;
+}
+
+/*********************************关于面包屑**********************************************/
+.ivu-breadcrumb .ivu-breadcrumb-item-link {
+  color: @breadcrumb
+}
+
+.breadcrum-last .ivu-breadcrumb-item-link {
+  color: @title-color;
+  font-weight: normal;
+}
+
+/*********************************关于表单**********************************************/
+
+.ivu-form .ivu-form-item-label {
+  font-size: 14px;
+  color: @title-color;
+}
+.ivu-table th{
+  height: 60px;
+}
+
+.ivu-form-item-content {
+  font-size: 14px;
+}
+.ivu-input[disabled], fieldset[disabled] .ivu-input{
+  color: @disabled;
+}
+.ivu-radio-group-button .ivu-radio-wrapper-disabled.ivu-radio-wrapper-checked{
+  color: @disabled;
+}
+/*********************************关于开关**********************************************/
+
+.ivu-switch {
+  height: 18px;
+  border-radius: 4px;
+  &:after {
+    height: 14px;
+    border-radius: 4px;
+  }
+}
+
+.ivu-page {
+  text-align: right;
+  margin-right: 30px;
+}
+
+/*********************************关于模态框**********************************************/
+.ivu-modal-footer{
+  border-top:none;
+  padding-bottom: 26px;
+  padding-right: 32px;
+}
+.ivu-modal-header p, .ivu-modal-header-inner{
+  font-size: 16px;
+  color: @title-color;
+  font-weight: normal;
+}
+.ivu-modal-body{
+  font-size: 14px;
+  padding: 16px 32px;
+}
+.ivu-modal-header{
+  padding: 26px 32px;
+}
+/*********************************关于按钮**********************************************/
+
+.ivu-btn-ghost{
+  color: #f5c06c;
+  background-color: transparent;
+  border-color: #f5c06c;
+}
