@@ -1,5 +1,5 @@
 <template>
-  <div class="integration-wrapper">
+  <div class="integration-wrapper" ref="integrationWrapper">
     <div class="area-content">
       <div class="area-title dib fw700">所属地区:</div>
       <ul class="area-list dib">
@@ -13,26 +13,27 @@
     </div>
     <div class="department-content" :class="{ 'fixed-height': moreText}">
       <div class="department-title dib fw700">所属部门:</div>
-      <ul class="department-list">
+      <ul class="department-list" ref="departmentList">
         <li class="dib department-item"
-            :class="{ active: departmentActive === item.value}"
+            :class="{ active: departmentActive === item.id}"
             v-for="item in departmentList"
             @click="handlerClickDepartment(item)"
-            :key="item.value">{{item.displayName}}
+            :key="item.id">{{item.displayName}}
         </li>
       </ul>
-      <Button type="text"
-              class="more-text"
-              @click="handlerClickChangeMoreText">{{moreText?'展开':'收起'}}
-      </Button>
+      <!--<Button type="text"-->
+      <!--class="more-text"-->
+      <!--@click="handlerClickChangeMoreText">{{moreText?'展开':'收起'}}-->
+      <!--</Button>-->
     </div>
     <div class="list-content">
-      <p class="fw700 fs15">法人服务事项列表（合计：{{totalNum}}）</p>
-      <Input v-model="keyword"
-             placeholder="请输入事项名称进行搜索"
-             icon="ios-search"
-             class="pull-right list-input"></Input>
+      <p class="fw700 fs15">法人服务事项列表</p>
+      <!--<Input v-model="keyword"-->
+      <!--placeholder="请输入事项名称进行搜索"-->
+      <!--icon="ios-search"-->
+      <!--class="pull-right list-input"></Input>-->
       <Table :columns="columns" :data="listData" :loading="loading"
+             :height="tableHeight"
              :show-header="false"
              class="table"></Table>
       <Page class="page"
@@ -46,81 +47,308 @@
 <script>
   import {tablePage} from '../common/mixed/mixed'
 
+  let departmentObj = {
+    gdsrmzfwz: [
+      {
+        displayName: '发改委',
+        name: '省发展改革委',
+        id: '006939756'
+      },
+      {
+        displayName: '食药监',
+        name: '省食品药品监管局',
+        id: '00694124X'
+      },
+      {
+        displayName: '公安',
+        name: '省公安厅',
+        id: '006940140'
+      },
+      {
+        displayName: '工商',
+        name: '省工商局',
+        id: '00694001X'
+      },
+      {
+        displayName: '农业',
+        name: '省农业厅',
+        id: '006939908'
+      },
+      {
+        displayName: '国土',
+        name: '省国土资源厅',
+        id: '006939932'
+      },
+      {
+        displayName: '教育',
+        name: '省教育厅',
+        id: '006940116'
+      },
+      {
+        displayName: '税务',
+        name: '省税务局',
+        id: '006941290'
+      },
+      {
+        displayName: '经信',
+        name: '省经济和信息化委',
+        id: '696453330'
+      },
+      {
+        displayName: '林业',
+        name: '省林业厅',
+        id: '006939916'
+      },
+    ],
+    bjsrmzfwz: [
+      {
+        displayName: '发改委',
+        name: '市发展改革委',
+        id: '18'
+      },
+      {
+        displayName: '食药监',
+        name: '市食品药品监管局',
+        id: '52'
+      },
+      {
+        displayName: '公安',
+        name: '市公安局',
+        id: '22'
+      },
+      {
+        displayName: '工商',
+        name: '市工商局',
+        id: '41'
+      },
+      {
+        displayName: '农业',
+        name: '市农委',
+        id: '10003'
+      },
+      {
+        displayName: '国土',
+        name: '市规划国土委（规划）',
+        id: '29'
+      },
+      {
+        displayName: '教育',
+        name: '市教委',
+        id: '19'
+      },
+      {
+        displayName: '税务',
+        name: '市地税局',
+        id: '40'
+      },
+      {
+        displayName: '经信',
+        name: '市经济信息化委',
+        id: '45'
+      },
+      {
+        displayName: '林业',
+        name: '市园林绿化局',
+        id: '58'
+      },
+    ],
+    shsrmzfwz: [
+      {
+        displayName: '发改委',
+        name: '上海市发展和改革委员会',
+        id: 'SHFGSH'
+      },
+      {
+        displayName: '食药监',
+        name: '上海市食品药品监督管理局',
+        id: 'SHSPSH'
+      },
+      {
+        displayName: '公安',
+        name: '上海市公安局',
+        id: 'SHGASH'
+      },
+      {
+        displayName: '工商',
+        name: '上海市工商行政管理局',
+        id: 'SHGSSH'
+      },
+      {
+        displayName: '农业',
+        name: '上海市农业委员会',
+        id: 'SHNYSH'
+      },
+      {
+        displayName: '国土',
+        name: '上海市规划和国土资源管理局',
+        id: 'SHGHSH'
+      },
+      {
+        displayName: '教育',
+        name: '上海市教育委员会',
+        id: 'SHJYSH'
+      },
+      {
+        displayName: '税务',
+        name: '上海市税务局',
+        id: 'SHGDSH'
+      },
+      {
+        displayName: '经信',
+        name: '上海市经济和信息化委员会',
+        id: 'SHJXSH'
+      },
+      {
+        displayName: '林业',
+        name: '上海市绿化和市容管理局',
+        id: 'SHSLSH'
+      },
+    ],
+    zjsrmzfwz: [
+      {
+        displayName: '发改委',
+        name: '省发展改革委',
+        id: '002482031'
+      },
+      {
+        displayName: '食药监',
+        name: '省食品药品监管局',
+        id: '002482461'
+      },
+      {
+        displayName: '公安',
+        name: '省公安厅',
+        id: '002482111'
+      },
+      {
+        displayName: '工商',
+        name: '省工商局',
+        id: '002482410'
+      },
+      {
+        displayName: '农业',
+        name: '省农业厅',
+        id: '002482306'
+      },
+      {
+        displayName: '国土',
+        name: '省国土资源厅',
+        id: '002482437'
+      },
+      {
+        displayName: '教育',
+        name: '省教育厅',
+        id: '002482082'
+      },
+      {
+        displayName: '税务',
+        name: '省税务局',
+        id: '002482189'
+      },
+      {
+        displayName: '经信',
+        name: '省经济和信息化委',
+        id: '002482904'
+      },
+      {
+        displayName: '林业',
+        name: '省林业厅',
+        id: '002482314'
+      },
+    ]
+  }
+  let currentKey = 'bjsrmzfwz'
   export default {
     name: "Integration",
     mixins: [tablePage],
     data() {
       return {
-        areaActive: 'Guangzhou',
-        departmentActive: '0',
         keyword: '',
-        moreText: false,
+        moreText: true,
         areaList: [
-          {'displayName': '广州', 'value': 'Guangzhou'},
-          {'displayName': '北京', 'value': 'Beijing'},
-          {'displayName': '上海', 'value': 'Shanghai'},
-          {'displayName': '浙江', 'value': 'Zhejiang'}
+          {'displayName': '北京', 'value': 'bjsrmzfwz'},
+          {'displayName': '上海', 'value': 'shsrmzfwz'},
+          {'displayName': '广东', 'value': 'gdsrmzfwz'},
+          {'displayName': '浙江', 'value': 'zjsrmzfwz'}
         ],
-        departmentList: [
-          {'displayName': '全部', 'value': '0'},
-          {'displayName': '市公安局', 'value': '1'},
-          {'displayName': '市AA局', 'value': '2'},
-          {'displayName': '市BB局', 'value': '3'},
-          {'displayName': '市cc局', 'value': '4'},
-          {'displayName': '市dd局', 'value': '5'},
-          {'displayName': '市dd局1', 'value': '35'},
-          {'displayName': '市dd局2', 'value': '53'},
-          {'displayName': '市dd局3', 'value': '54'},
-          {'displayName': '市dd局5', 'value': '5777'},
-          {'displayName': '市dd局5', 'value': '577'},
-          {'displayName': '市dd局5', 'value': '5177'},
-          {'displayName': '市dd局5', 'value': '5727'},
-          {'displayName': '市dd局5', 'value': '57777'},
-
-        ],
+        departmentList: departmentObj[currentKey],
+        areaActive: currentKey,
+        departmentActive: departmentObj[currentKey][0].id,
         columns: [
           {
             title: '',
             align: 'left',
             render: (h, params) => {
-              let {displayName, name} = params.row;
+              let {title, url} = params.row;
               return h('div', [
-                h('p', {
-                  style: {}
-                }, displayName),
-                h('p', {
-                  style: {}
-                }, name)
+                h('a', {
+                  style: {
+                    paddingLeft: '40px'
+                  },
+                  domProps: {
+                    className: 'text-overflow',
+                    href: url,
+                    target: '_blank',
+                    title
+                  }
+                }, title),
               ]);
             }
           },
         ],
-        listData: [
-          {'displayName': '中小学地方课程教材审定', 'name': '上海·市教委', 'value': '1'},
-          {'displayName': '上报国家发展改革委审批的进口设备免税确认书初审', 'name': '上海·市发展改革', 'value': '2'},
-          {'displayName': '企业、事业单位、社会团体等投资建设的固定资产投资项目核准(不含工业和信息化投资项目', 'name': '上海·市发展改革委', 'value': '3'},
-          {'displayName': '城市基础设施专项建设资金减免缓审批（含城市基础设施建设费减免缓）', 'name': '上海·市发展改革委', 'value': '4'},
-          {'displayName': '举办外国的和香港特别行政区、澳门特别行政区及台湾地区的文艺表演团体、个人参加的营业性演出审批', 'name': '上海·市文化局', 'value': '5'},
-        ],
-        totalNum: 0
+        listData: [],
+        totalNum: 0,
+        tableHeight: 0
       }
     },
-    created() {
-      this._getList(true);
+    mounted() {
+
+      let offsetHeight = this.$refs.integrationWrapper.offsetHeight
+      this.tableHeight = Math.max((offsetHeight - 280), 150)
+      window.onresize = () => {
+        let offsetHeight = this.$refs.integrationWrapper.offsetHeight
+        this.tableHeight = Math.max((offsetHeight - 280), 150)
+      }
+      this._getList(true)
     },
     methods: {
-      _getList(showLoading) {
-
+      _getList(loading = false) {
+        let url = `${this.areaActive}`
+        let params = {
+          'iw-apikey': '123',
+          'iw-cmd': this.areaActive,
+          'bm': this.departmentActive,
+          'page': this.page,
+          // keywords: this.keyword
+        }
+        this.loading = loading
+        this.$get(url, params)
+          .then((res) => {
+            let {rtnCode, data, rtnMsg} = res
+            if (rtnCode === '000000' || rtnCode === '0000000') {
+              this.listData = data.list
+            } else {
+              this.listData = data.list
+              this.$Message.error(rtnMsg)
+            }
+          })
+          .finally(() => {
+            this._changeLoading()
+          })
       },
       handlerPageChange(val) {
-        this.pageNum = val
+        this.page = val
         this._getList(true)
       },
       handlerClickArea(item) {
         this.areaActive = item.value
+        this.departmentList = departmentObj[this.areaActive]
+        this.departmentActive = this.departmentList[0].id
+        this._getList(true)
       },
       handlerClickDepartment(item) {
-        this.departmentActive = item.value
+        this.departmentActive = item.id
+        this._getList(true)
       },
       handlerClickChangeMoreText() {
         this.moreText = !this.moreText
@@ -202,7 +430,7 @@
       width: 100%;
     }
     .page {
-      margin-top: 12px;
+      margin-top: 20px;
     }
     .department-enter-active, .department-leave-active {
       transition: all 0.3s ease

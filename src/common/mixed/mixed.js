@@ -1,4 +1,3 @@
-
 import {formatDate} from '../../../src/common/js/common'
 
 
@@ -8,14 +7,12 @@ export const tablePage = {
       loading: false,
       numPerPage: 6,
       totalNum: 0,
-      pageNum: 1,
+      page: 1,
       keyword: '',
       listData: []
     }
   },
-  computed: {
-
-  },
+  computed: {},
   methods: {
     handlerPageChange(val) {
       this.pageNum = val
@@ -27,7 +24,7 @@ export const tablePage = {
     _changeLoading() {
       setTimeout(() => {
         this.loading = false
-      }, 500)
+      }, 300)
     }
   }
 }
