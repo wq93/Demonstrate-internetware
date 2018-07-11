@@ -313,7 +313,7 @@
     },
     methods: {
       _getList(loading = false) {
-        let url = `${this.areaActive}`
+        let url = ``
         let params = {
           'iw-apikey': '123',
           'iw-cmd': this.areaActive,

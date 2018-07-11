@@ -75,13 +75,14 @@
     },
     methods: {
       _getList() {
-        let url = `/txl`
+        let url = ``
         let params = {
           'iw-apikey': localStorage.getItem('userName') || '',
           'iw-cmd': 'txl',
           'page': 1,
           keywords: this.keyword
         }
+        this.loading = true
         this.$get(url, params)
           .then((res) => {
             let {rtnCode, rtnMsg, data} = res
@@ -92,12 +93,12 @@
                 this.userList = data.list
                 this.$Message.error(rtnMsg)
               }
-            }, 1000)
+            }, 300)
           })
           .finally(() => {
             setTimeout(() => {
               this.loading = false
-            }, 1000)
+            }, 300)
           })
       }
     }

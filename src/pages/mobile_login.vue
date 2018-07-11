@@ -55,7 +55,7 @@
           }, 300)
           return false
         }
-        let url = `/iQuickerLogin`
+        let url = ``
         let params = {
           password: this.password,
           userName: this.userName,
