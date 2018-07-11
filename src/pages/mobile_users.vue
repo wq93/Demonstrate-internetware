@@ -50,6 +50,7 @@
 
 <script>
   import Scroll from '../components/scroll/scroll.vue'
+  import {codeMsg} from './codeMsg'
 
   export default {
     name: "mobile_users",
@@ -89,9 +90,17 @@
             setTimeout(() => {
               if (rtnCode === "000000") {
                 this.userList = data.list
-              } else {
+              } else if (rtnCode === "900003") {
                 this.userList = data.list
                 this.$Message.error(rtnMsg)
+                this.$router.push('/mobile')
+              } else {
+                this.userList = data.list
+                if (rtnMsg) {
+                  this.$Message.error(rtnMsg)
+                } else {
+                  this.$Message.error(codeMsg[rtnCode])
+                }
               }
             }, 300)
           })

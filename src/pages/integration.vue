@@ -46,6 +46,7 @@
 
 <script>
   import {tablePage} from '../common/mixed/mixed'
+  import {codeMsg} from './codeMsg'
 
   let departmentObj = {
     gdsrmzfwz: [
@@ -329,7 +330,11 @@
               this.listData = data.list
             } else {
               this.listData = data.list
-              this.$Message.error(rtnMsg)
+              if (rtnMsg) {
+                this.$Message.error(rtnMsg)
+              } else {
+                this.$Message.error(codeMsg[rtnCode])
+              }
             }
           })
           .finally(() => {

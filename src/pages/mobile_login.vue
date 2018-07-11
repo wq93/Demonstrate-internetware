@@ -35,6 +35,8 @@
   </div>
 </template>
 <script>
+  import {codeMsg} from './codeMsg'
+
   export default {
     data() {
       return {
@@ -46,8 +48,6 @@
     methods: {
       handleClickLogin() {
         if (this.password.trim() === '' || this.userName.trim() === '') {
-          console.log(this.password)
-          console.log(this.userName)
           this.loading = true
           this.$Message.error(`用户名或密码不能为空`)
           setTimeout(() => {
@@ -75,7 +75,11 @@
               this.$router.push('/mobile/users')
               localStorage.setItem('userName', this.userName)
             } else {
-              this.$Message.error(state)
+              if (state) {
+                this.$Message.error(state)
+              } else {
+                this.$Message.error(codeMsg[rtnCode])
+              }
             }
           }).finally(() => {
           this.loading = false
@@ -98,7 +102,7 @@
     }
     .password-inp,
     .user-inp {
-      outline:medium;
+      outline: medium;
       width: 100%;
       padding-left: 20px;
       height: 41px;
