@@ -1,14 +1,20 @@
 <template>
   <div class="mobile-users-wrapper">
     <div class="mobile-users-header">
-      <div @click="$router.push('/mobile')">
+      <div @click="handleClickClear()">
         <Icon type="chevron-left"
               class="back-icon"></Icon>
       </div>
       通讯录
     </div>
     <div class="mobile-users-search">
-      <Input v-model="keyword" icon="ios-search" placeholder="搜索" style="width: 100%"></Input>
+      <input v-model="keyword"
+             icon="ios-search"
+             placeholder="搜索"
+             ref="search"></input>
+      <span class="search-btn" @click="handleClickSearch">
+        <Icon type="ios-search" :size="24"></Icon>
+      </span>
     </div>
     <Row v-if="loading">
       <Col class="demo-spin-col" span="8">
@@ -20,7 +26,13 @@
     </Row>
     <div v-else>
       <div class="mobile-users-list-wrapper" v-if="userList.length>0">
-        <scroll ref="userList" :data="userList" class="mobile-users-list">
+        <scroll ref="userList"
+                class="mobile-users-list"
+                :data="userList"
+                :pullup="pullup"
+                :beforeScroll="beforeScroll"
+                @scrollToEnd="searchMore"
+                @beforeScroll="listScroll">
           <ul ref="list">
             <li class="user-item" v-for="item in userList" :key="item.tel">
               <Row>
@@ -38,8 +50,8 @@
               </Row>
             </li>
           </ul>
+          <div style="text-align: center" v-show='hasMore'>正在加载中...</div>
         </scroll>
-        <div></div>
       </div>
       <div v-else>
         <p style="margin-top: 40px;text-align: center">暂无数据</p>
@@ -51,6 +63,7 @@
 <script>
   import Scroll from '../components/scroll/scroll.vue'
   import {codeMsg} from './codeMsg'
+  import $ from 'jquery';
 
   export default {
     name: "mobile_users",
@@ -61,55 +74,81 @@
       return {
         keyword: '',
         loading: false,
-        userList: []
+        userList: [],
+        page: 1,
+        pullup: true,
+        hasMore: true,
+        beforeScroll: true
       }
     },
     mounted() {
-      this._getList()
+      this._getList(true)
     },
     watch: {
-      keyword: {
-        handler(curVal) {
-          this._getList()
-        },
-      }
+      // keyword: {
+      //   handler(curVal) {
+      //     this._getList()
+      //   },
+      // }
     },
     methods: {
-      _getList() {
-        let url = ``
-        let params = {
-          'iw-apikey': localStorage.getItem('userName') || '',
-          'iw-cmd': 'txl',
-          'page': 1,
-          keywords: this.keyword
+      _getList(loading = false) {
+        let url = `https://api.internetware.cn/farenbanshi/?iw-apikey=${localStorage.getItem('userName') || '123'}&iw-cmd=txl&page=${this.page}&keywords=${this.keyword}`
+        let deloy = 300
+        this.loading = loading
+        if (!loading) {
+          deloy = 0
         }
-        this.loading = true
-        this.$get(url, params)
-          .then((res) => {
+        $.ajax({
+          url,
+          type: "GET",
+          success: (res) => {
             let {rtnCode, rtnMsg, data} = res
             setTimeout(() => {
               if (rtnCode === "000000") {
                 this.userList = data.list
               } else if (rtnCode === "900003") {
-                this.userList = data.list
-                this.$Message.error(rtnMsg)
-                this.$router.push('/mobile')
+                this.userList = this.userList.concat(data.list)
+                // this.$Message.error(rtnMsg)
               } else {
                 this.userList = data.list
-                if (rtnMsg) {
-                  this.$Message.error(rtnMsg)
-                } else {
-                  this.$Message.error(codeMsg[rtnCode])
-                }
+                // if (rtnMsg) {
+                //   this.$Message.error(rtnMsg)
+                // } else {
+                //   this.$Message.error(codeMsg[rtnCode])
+                // }
               }
-            }, 300)
-          })
-          .finally(() => {
-            setTimeout(() => {
               this.loading = false
-            }, 300)
-          })
-      }
+              this.hasMore = false
+            }, deloy)
+          },
+          error: (data) => {
+            this.userList = []
+            // this.$Message.error('未知错误')
+            this.loading = false
+          }
+        });
+      },
+      handleClickClear() {
+        this.keyword = ''
+        this._getList()
+      },
+      handleClickSearch() {
+        if (this.keyword !== '') {
+          this.page = 1
+          this.$refs.userList.scrollTo(0, 0)
+          this._getList(true)
+        }
+      },
+      searchMore() {
+        // 下拉加载更多
+        console.log('下拉加载更多')
+        this.page++
+        this._getList()
+      },
+      listScroll() {
+        this.$refs.search.blur()
+      },
     }
   }
 </script>
@@ -162,8 +201,23 @@
       padding: 6px 12px;
       height: 44px;
       background: #eee;
+      position: relative;
+      input {
+        outline: medium;
+        width: 100%;
+        height: 32px;
+        padding-left: 12px;
+        border: 0;
+        border-radius: 4px;
+      }
       input::-webkit-input-placeholder {
-        text-align: center;
+        /*text-align: center;*/
+      }
+      .search-btn {
+        position: absolute;
+        top: 10px;
+        right: 22px;
+        padding: 0 8px;
       }
     }
     .mobile-users-list-wrapper {
@@ -184,6 +238,7 @@
         .ivu-avatar {
           display: block;
           margin: 0 auto;
+          background: #d9edf8;
         }
       }
       .user-item-detail {

@@ -31,12 +31,15 @@
           <span v-else>Loading...</span>
         </Button>
       </div>
+      <div style="margin-top: 20px;text-align: center;color: #3385ff">
+        燕云移动化支持
+      </div>
     </div>
   </div>
 </template>
 <script>
   import {codeMsg} from './codeMsg'
-
+  import $ from 'jquery';
   export default {
     data() {
       return {
@@ -55,18 +58,22 @@
           }, 300)
           return false
         }
-        let url = ``
-        let params = {
-          password: this.password,
-          userName: this.userName,
-          'iw-apikey': this.userName,
-          'iw-cmd': 'iQuickerLogin'
-        }
+        // let url = ``
+        // let params = {
+        //   password: this.password,
+        //   userName: this.userName,
+        //   'iw-apikey': this.userName,
+        //   'iw-cmd': 'iQuickerLogin'
+        // }
+        let url = `https://api.internetware.cn/farenbanshi/?password=${this.password}&userName=${this.userName}&iw-cmd=iQuickerLogin&iw-apikey=${this.userName}`
         this.loading = true
-        this.$get(url, params)
-          .then((res) => {
+        $.ajax({
+          url,
+          type: "GET",
+          success: (res) => {
             let {rtnCode, data} = res
             let {state} = data
+            this.loading = false
             if (rtnCode === "000000") {
               this.$Message.success({
                 content: '登录成功',
@@ -81,9 +88,35 @@
                 this.$Message.error(codeMsg[rtnCode])
               }
             }
-          }).finally(() => {
-          this.loading = false
-        })
+          },
+          error: (data) => {
+            this.loading = false
+            this.$Message.error('未知错误')
+          }
+        });
+
+
+        // this.$get(url, params)
+        //   .then((res) => {
+        //     let {rtnCode, data} = res
+        //     let {state} = data
+        //     if (rtnCode === "000000") {
+        //       this.$Message.success({
+        //         content: '登录成功',
+        //         duration: 2
+        //       });
+        //       this.$router.push('/mobile/users')
+        //       localStorage.setItem('userName', this.userName)
+        //     } else {
+        //       if (state) {
+        //         this.$Message.error(state)
+        //       } else {
+        //         this.$Message.error(codeMsg[rtnCode])
+        //       }
+        //     }
+        //   }).finally(() => {
+        //   this.loading = false
+        // })
       }
     }
   }

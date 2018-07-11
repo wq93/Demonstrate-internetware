@@ -47,6 +47,7 @@
 <script>
   import {tablePage} from '../common/mixed/mixed'
   import {codeMsg} from './codeMsg'
+  import $ from 'jquery';
 
   let departmentObj = {
     gdsrmzfwz: [
@@ -303,7 +304,6 @@
       }
     },
     mounted() {
-
       let offsetHeight = this.$refs.integrationWrapper.offsetHeight
       this.tableHeight = Math.max((offsetHeight - 280), 150)
       window.onresize = () => {
@@ -314,32 +314,58 @@
     },
     methods: {
       _getList(loading = false) {
-        let url = ``
-        let params = {
-          'iw-apikey': '123',
-          'iw-cmd': this.areaActive,
-          'bm': this.departmentActive,
-          'page': this.page,
-          // keywords: this.keyword
-        }
+        let url = `https://api.internetware.cn/farenbanshi/?iw-apikey=123&iw-cmd=${this.areaActive}&page=${this.page}&bm=${this.departmentActive}`
+        // let params = {
+        //   'iw-apikey': '123',
+        //   'iw-cmd': this.areaActive,
+        //   'bm': this.departmentActive,
+        //   'page': this.page,
+        //   // keywords: this.keyword
+        // }
         this.loading = loading
-        this.$get(url, params)
-          .then((res) => {
+
+        $.ajax({
+          url,
+          type: "GET",
+          success: (res) => {
+            console.log(res)
             let {rtnCode, data, rtnMsg} = res
             if (rtnCode === '000000' || rtnCode === '0000000') {
               this.listData = data.list
+              this._changeLoading()
             } else {
               this.listData = data.list
+              this._changeLoading()
               if (rtnMsg) {
                 this.$Message.error(rtnMsg)
               } else {
                 this.$Message.error(codeMsg[rtnCode])
               }
             }
-          })
-          .finally(() => {
-            this._changeLoading()
-          })
+          },
+          error: (data) => {
+            this.loading = false
+            this.$Message.error('未知错误')
+          }
+        });
+
+        // this.$get(url, params)
+        //   .then((res) => {
+        //     let {rtnCode, data, rtnMsg} = res
+        //     if (rtnCode === '000000' || rtnCode === '0000000') {
+        //       this.listData = data.list
+        //     } else {
+        //       this.listData = data.list
+        //       if (rtnMsg) {
+        //         this.$Message.error(rtnMsg)
+        //       } else {
+        //         this.$Message.error(codeMsg[rtnCode])
+        //       }
+        //     }
+        //   })
+        //   .finally(() => {
+        //     this._changeLoading()
+        //   })
       },
       handlerPageChange(val) {
         this.page = val

@@ -34,6 +34,7 @@ const router = new Router({
       name: 'mobileUsers',
       component: MobileUsers
     },
+
   ]
 })
 export default router

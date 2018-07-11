@@ -1,6 +1,6 @@
 export const config = {
   domain: location.protocol + '//' + location.host + '/',
-  apiBase: location.protocol + '//' + location.host + '/farenbanshi/'
+  apiBase: 'https://api.internetware.cn/farenbanshi/'
 };
 export const codeMessage = {
   1: '登录已过期，请重新登录！',
