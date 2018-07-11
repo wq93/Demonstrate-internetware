@@ -345,7 +345,7 @@
           },
           error: (data) => {
             this.loading = false
-            this.$Message.error('未知错误')
+            this.$Message.error('连接失败,请稍后重试')
           }
         });
 

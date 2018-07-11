@@ -11,21 +11,22 @@
       <input v-model="keyword"
              icon="ios-search"
              placeholder="搜索"
-             ref="search"></input>
+             ref="search"
+             @keyup.enter="handleClickSearch"></input>
       <span class="search-btn" @click="handleClickSearch">
         <Icon type="ios-search" :size="24"></Icon>
       </span>
     </div>
     <Row v-if="loading">
       <Col class="demo-spin-col" span="8">
-        <Spin fix>
-          <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-          <div>Loading</div>
-        </Spin>
+      <Spin fix>
+        <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+        <div>Loading</div>
+      </Spin>
       </Col>
     </Row>
     <div v-else>
-      <div class="mobile-users-list-wrapper" v-if="userList.length>0">
+      <div class="mobile-users-list-wrapper">
         <scroll ref="userList"
                 class="mobile-users-list"
                 :data="userList"
@@ -37,24 +38,26 @@
             <li class="user-item" v-for="item in userList" :key="item.tel">
               <Row>
                 <Col span="6" class="user-item-avatar">
-                  <Avatar shape="square" icon="person" size="large"/>
+                <Avatar shape="square" icon="person" size="large"/>
                 </Col>
                 <Col span="18">
-                  <div class="user-item-detail">
-                    <span class="name">{{item.xm}}</span>
-                    <span>{{item.bm}}</span>
-                    <p>{{item.dh}}</p>
-                    <p>{{item.yx}}</p>
-                  </div>
+                <div class="user-item-detail">
+                  <span class="name">{{item.xm}}</span>
+                  <span>{{item.bm}}</span>
+                  <p>{{item.dh}}</p>
+                  <p>{{item.yx}}</p>
+                </div>
                 </Col>
               </Row>
             </li>
+            <div style="text-align: center;margin-top: 10px" v-show='hasMore'>
+              加载中...
+            </div>
           </ul>
-          <div style="text-align: center" v-show='hasMore'>正在加载中...</div>
+          <div v-show="!hasMore && !userList.length">
+            <p style="margin-top: 40px;text-align: center">暂无数据</p>
+          </div>
         </scroll>
-      </div>
-      <div v-else>
-        <p style="margin-top: 40px;text-align: center">暂无数据</p>
       </div>
     </div>
   </div>
@@ -77,7 +80,7 @@
         userList: [],
         page: 1,
         pullup: true,
-        hasMore: true,
+        hasMore: false,
         beforeScroll: true
       }
     },
@@ -96,9 +99,9 @@
         let url = `https://api.internetware.cn/farenbanshi/?iw-apikey=${localStorage.getItem('userName') || '123'}&iw-cmd=txl&page=${this.page}&keywords=${this.keyword}`
         let deloy = 300
         this.loading = loading
-        if (!loading) {
-          deloy = 0
-        }
+        // if (!loading) {
+        //   deloy = 0
+        // }
         $.ajax({
           url,
           type: "GET",
@@ -106,12 +109,12 @@
             let {rtnCode, rtnMsg, data} = res
             setTimeout(() => {
               if (rtnCode === "000000") {
-                this.userList = data.list
-              } else if (rtnCode === "900003") {
                 this.userList = this.userList.concat(data.list)
+              } else if (rtnCode === "900003") {
+                this.userList = []
                 // this.$Message.error(rtnMsg)
               } else {
-                this.userList = data.list
+                this.userList = []
                 // if (rtnMsg) {
                 //   this.$Message.error(rtnMsg)
                 // } else {
@@ -123,15 +126,19 @@
             }, deloy)
           },
           error: (data) => {
-            this.userList = []
-            // this.$Message.error('未知错误')
-            this.loading = false
+            setTimeout(() => {
+              this.userList = []
+              this.hasMore = false
+              // this.$Message.error('未知错误')
+              this.loading = false
+            }, 300)
           }
         });
       },
       handleClickClear() {
         this.keyword = ''
-        this._getList()
+        this.page = 1
+        this._getList(true)
       },
       handleClickSearch() {
         if (this.keyword !== '') {
@@ -147,6 +154,7 @@
         this._getList()
       },
       listScroll() {
+        this.hasMore = true
         this.$refs.search.blur()
       },
     }
