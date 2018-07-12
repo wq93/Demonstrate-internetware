@@ -92,7 +92,7 @@
       // }
     },
     methods: {
-      _getList(loading = false) {
+      _getList(loading = false, type = 'normal') {
         let url = `https://api.internetware.cn/farenbanshi/?iw-apikey=${localStorage.getItem('userName') || '123'}&iw-cmd=txl&page=${this.page}&keywords=${this.keyword}`
         let deloy = 300
         this.loading = loading
@@ -109,6 +109,9 @@
                 this.userList = data.list
               } else if (rtnCode === "900003") {
                 this.userList = this.userList.concat(data.list)
+                // this.$Message.error(rtnMsg)
+              } else if (rtnCode === "900005" && type === 'scrollMore') {
+                this.userList = this.userList
                 // this.$Message.error(rtnMsg)
               } else {
                 this.userList = data.list
@@ -143,8 +146,9 @@
       searchMore() {
         // 下拉加载更多
         console.log('下拉加载更多')
+        let type = 'scrollMore'
         this.page++
-        this._getList()
+        this._getList(false, type)
       },
       listScroll() {
         this.$refs.search.blur()
