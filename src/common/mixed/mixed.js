@@ -1,13 +1,10 @@
-import {formatDate} from '../../../src/common/js/common'
-
-
 export const tablePage = {
   data() {
     return {
       loading: false,
-      numPerPage: 6,
+      numPerPage: 50,
       totalNum: 0,
-      page: 1,
+      pageNum: 1,
       keyword: '',
       listData: []
     }

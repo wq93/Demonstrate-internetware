@@ -19,10 +19,10 @@
     </div>
     <Row v-if="loading">
       <Col class="demo-spin-col" span="8">
-      <Spin fix>
-        <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-        <div>Loading</div>
-      </Spin>
+        <Spin fix>
+          <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+          <div>Loading</div>
+        </Spin>
       </Col>
     </Row>
     <div v-else>
@@ -38,23 +38,23 @@
             <li class="user-item" v-for="item in userList" :key="item.tel">
               <Row>
                 <Col span="6" class="user-item-avatar">
-                <Avatar shape="square" icon="person" size="large"/>
+                  <Avatar shape="square" icon="person" size="large"/>
                 </Col>
                 <Col span="18">
-                <div class="user-item-detail">
-                  <span class="name">{{item.xm}}</span>
-                  <span>{{item.bm}}</span>
-                  <p>{{item.dh}}</p>
-                  <p>{{item.yx}}</p>
-                </div>
+                  <div class="user-item-detail">
+                    <span class="name">{{item.xm}}</span>
+                    <span>{{item.bm}}</span>
+                    <p>{{item.dh}}</p>
+                    <p>{{item.yx}}</p>
+                  </div>
                 </Col>
               </Row>
             </li>
-            <div style="text-align: center;margin-top: 10px" v-show='hasMore'>
+            <div style="text-align: center;margin: 6px 0" v-if='hasMore'>
               加载中...
             </div>
           </ul>
-          <div v-show="!hasMore && !userList.length">
+          <div v-if="!hasMore && !userList.length">
             <p style="margin-top: 40px;text-align: center">暂无数据</p>
           </div>
         </scroll>
@@ -80,59 +80,46 @@
         userList: [],
         page: 1,
         pullup: true,
-        hasMore: false,
+        hasMore: true,
         beforeScroll: true
       }
     },
     mounted() {
       this._getList(true)
     },
-    watch: {
-      // keyword: {
-      //   handler(curVal) {
-      //     this._getList()
-      //   },
-      // }
-    },
     methods: {
       _getList(loading = false, type = 'normal') {
         let url = `https://api.internetware.cn/farenbanshi/?iw-apikey=${localStorage.getItem('userName') || '123'}&iw-cmd=txl&page=${this.page}&keywords=${this.keyword}`
         let deloy = 300
         this.loading = loading
-        // if (!loading) {
-        //   deloy = 0
-        // }
         $.ajax({
           url,
           type: "GET",
           success: (res) => {
             let {rtnCode, rtnMsg, data} = res
-            setTimeout(() => {
-              if (rtnCode === "000000") {
-                this.userList = this.userList.concat(data.list)
-              } else if (rtnCode === "900003") {
-                this.userList = []
-                // this.$Message.error(rtnMsg)
-              } else if (rtnCode === "900005" && type === 'scrollMore') {
-                this.userList = this.userList
-                // this.$Message.error(rtnMsg)
-              } else {
-                this.userList = []
-                // if (rtnMsg) {
-                //   this.$Message.error(rtnMsg)
-                // } else {
-                //   this.$Message.error(codeMsg[rtnCode])
-                // }
+            if (rtnCode === "000000") {
+              this.userList = this.userList.concat(data.list)
+              if (data.list.length < 10) {
+                this.hasMore = false
               }
-              this.loading = false
+            } else if (rtnCode === "900003") {
+              this.userList = []
               this.hasMore = false
+            } else if (rtnCode === "900005" && type === 'scrollMore') {
+              this.userList = this.userList
+              this.hasMore = false
+            } else {
+              this.userList = []
+              this.hasMore = false
+            }
+            setTimeout(() => {
+              this.loading = false
             }, deloy)
           },
           error: (data) => {
             setTimeout(() => {
               this.userList = []
               this.hasMore = false
-              // this.$Message.error('未知错误')
               this.loading = false
             }, 300)
           }
@@ -140,25 +127,28 @@
       },
       handleClickClear() {
         this.keyword = ''
+        this.$refs.userList.scrollTo(0, 0)
         this.page = 1
+        this.userList = []
+        this.hasMore = true
         this._getList(true)
       },
       handleClickSearch() {
-        if (this.keyword !== '') {
-          this.page = 1
-          this.$refs.userList.scrollTo(0, 0)
-          this._getList(true)
-        }
+        this.$refs.userList.scrollTo(0, 0)
+        this.page = 1
+        this.hasMore = true
+        this.userList = []
+        this._getList(true)
       },
       searchMore() {
-        // 下拉加载更多
-        console.log('下拉加载更多')
+        if (!this.hasMore) {
+          return false
+        }
         let type = 'scrollMore'
         this.page++
         this._getList(false, type)
       },
       listScroll() {
-        this.hasMore = true
         this.$refs.search.blur()
       },
     }

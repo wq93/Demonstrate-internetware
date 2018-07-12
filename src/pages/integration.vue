@@ -37,6 +37,7 @@
              :show-header="false"
              class="table"></Table>
       <Page class="page"
+            v-if="onPageShow"
             :total="totalNum"
             :page-size='numPerPage'
             @on-change="handlerPageChange"></Page>
@@ -300,7 +301,8 @@
         ],
         listData: [],
         totalNum: 0,
-        tableHeight: 0
+        tableHeight: 0,
+        onPageShow: false
       }
     },
     mounted() {
@@ -314,27 +316,22 @@
     },
     methods: {
       _getList(loading = false) {
-        let url = `https://api.internetware.cn/farenbanshi/?iw-apikey=123&iw-cmd=${this.areaActive}&page=${this.page}&bm=${this.departmentActive}`
-        // let params = {
-        //   'iw-apikey': '123',
-        //   'iw-cmd': this.areaActive,
-        //   'bm': this.departmentActive,
-        //   'page': this.page,
-        //   // keywords: this.keyword
-        // }
+        let url = `https://api.internetware.cn/farenbanshi/?iw-apikey=123&iw-cmd=${this.areaActive}&page=${this.pageNum}&bm=${this.departmentActive}`
         this.loading = loading
-
         $.ajax({
           url,
           type: "GET",
           success: (res) => {
-            console.log(res)
             let {rtnCode, data, rtnMsg} = res
             if (rtnCode === '000000' || rtnCode === '0000000') {
               this.listData = data.list
+              this.totalNum = data.totalPages * this.numPerPage
+              if (data.totalPages && Number(data.totalPages) >= 1) {
+                this.onPageShow = true
+              }
               this._changeLoading()
             } else {
-              this.listData = data.list
+              this.listData = []
               this._changeLoading()
               if (rtnMsg) {
                 this.$Message.error(rtnMsg)
@@ -345,40 +342,23 @@
           },
           error: (data) => {
             this.loading = false
+            this.listData = []
             this.$Message.error('连接失败,请稍后重试')
           }
-        });
-
-        // this.$get(url, params)
-        //   .then((res) => {
-        //     let {rtnCode, data, rtnMsg} = res
-        //     if (rtnCode === '000000' || rtnCode === '0000000') {
-        //       this.listData = data.list
-        //     } else {
-        //       this.listData = data.list
-        //       if (rtnMsg) {
-        //         this.$Message.error(rtnMsg)
-        //       } else {
-        //         this.$Message.error(codeMsg[rtnCode])
-        //       }
-        //     }
-        //   })
-        //   .finally(() => {
-        //     this._changeLoading()
-        //   })
-      },
-      handlerPageChange(val) {
-        this.page = val
-        this._getList(true)
+        })
       },
       handlerClickArea(item) {
         this.areaActive = item.value
         this.departmentList = departmentObj[this.areaActive]
         this.departmentActive = this.departmentList[0].id
+        this.pageNum = 1
+        this.onPageShow = false
         this._getList(true)
       },
       handlerClickDepartment(item) {
         this.departmentActive = item.id
+        this.pageNum = 1
+        this.onPageShow = false
         this._getList(true)
       },
       handlerClickChangeMoreText() {
