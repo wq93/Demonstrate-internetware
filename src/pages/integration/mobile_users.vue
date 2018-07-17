@@ -64,8 +64,8 @@
 </template>
 
 <script>
-  import Scroll from '../components/scroll/scroll.vue'
-  import {codeMsg} from './codeMsg'
+  import Scroll from '../../components/scroll/scroll.vue'
+  import {codeMsg} from '../codeMsg'
   import $ from 'jquery';
 
   export default {

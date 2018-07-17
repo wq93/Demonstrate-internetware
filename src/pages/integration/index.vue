@@ -1,7 +1,7 @@
 <template>
   <div>
     <header class="header-content">
-      <img src="../common/image/header_logo.png" alt="" style="vertical-align: top">
+      <img src="../../common/image/header_logo.png" alt="" style="vertical-align: top">
       <h2 class="dib">重点省份行政服务事项综合办理平台</h2>
     </header>
     <main class="main-content">

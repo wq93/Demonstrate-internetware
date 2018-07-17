@@ -46,8 +46,8 @@
 </template>
 
 <script>
-  import {tablePage} from '../common/mixed/mixed'
-  import {codeMsg} from './codeMsg'
+  import {tablePage} from '../../common/mixed/mixed'
+  import {codeMsg} from '../codeMsg'
   import $ from 'jquery';
 
   let departmentObj = {
@@ -272,7 +272,7 @@
           {'displayName': '北京', 'value': 'bjsrmzfwz'},
           {'displayName': '上海', 'value': 'shsrmzfwz'},
           {'displayName': '广东', 'value': 'gdsrmzfwz'},
-          {'displayName': '浙江', 'value': 'zjsrmzfwz'}
+          // {'displayName': '浙江', 'value': 'zjsrmzfwz'}
         ],
         departmentList: departmentObj[currentKey],
         areaActive: currentKey,

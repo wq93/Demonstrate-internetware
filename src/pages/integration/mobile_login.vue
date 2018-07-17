@@ -38,7 +38,7 @@
   </div>
 </template>
 <script>
-  import {codeMsg} from './codeMsg'
+  import {codeMsg} from '../codeMsg'
   import $ from 'jquery';
 
   export default {
@@ -127,7 +127,7 @@
     .mobile-login-icon {
       background-size: 60% 150px;
       background-color: #eee;
-      background-image: url("../common/image/iquicker.svg");
+      background-image: url("../../common/image/iquicker.svg");
       background-repeat: no-repeat;
       background-position: center center;
       width: 100%;
