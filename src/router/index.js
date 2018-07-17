@@ -16,6 +16,9 @@ import hdsq from '../pages/rainwater/water/hdsq'
 import zbsq from '../pages/rainwater/water/zbsq'
 
 import sdsyq from '../pages/rainwater/rain/sdsyq'
+import areaDetail from '../pages/rainwater/rain/area_detail'
+import siteDetail from '../pages/rainwater/rain/site_detail'
+import table from '../pages/table'
 
 
 Vue.use(Router)
@@ -85,11 +88,31 @@ const router = new Router({
     },
     // 雨情
     {
-      path: '/rainwater/rain/:type',
-      props: true,
+      path: '/rainwater/rain/sdsyq',
       name: 'sdsyq',
       meta: {title: ''},
       component: sdsyq
+    },
+    // 地区雨情
+    {
+      path: '/rainwater/rain/area/:id/:name',
+      name: 'areaDetail',
+      props: true,
+      meta: {title: ''},
+      component: areaDetail
+    },
+    // 站点雨晴
+    {
+      path: '/rainwater/rain/site/:id/:name',
+      name: 'siteDetail',
+      props: true,
+      meta: {title: ''},
+      component: siteDetail
+    },
+
+    {
+      path: '/table',
+      component: table
     },
   ]
 })

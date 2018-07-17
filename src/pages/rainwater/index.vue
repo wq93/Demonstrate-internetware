@@ -1,22 +1,38 @@
 <template>
   <div class="rainwater-wrapper">
-    <embed src="../../common/image/banner.swf" wi/>
-    <h4 class="rainwater-title">水情</h4>
-    <ul>
-      <li v-for="water in waterList"
-          :key="water.key"
-          class="item-li"
-          @click="handleClick(water)">{{water.value}}
-      </li>
-    </ul>
-    <h4 class="rainwater-title">雨情</h4>
-    <ul>
-      <li v-for="rain in rainList"
-          :key="rain.key"
-          class="item-li"
-          @click="handleClick(rain)">{{rain.value}}
-      </li>
-    </ul>
+    <div class="banner"></div>
+    <div class="rainwater-content">
+      <h4 class="rainwater-title">水情</h4>
+      <ul>
+        <li v-for="water in waterList"
+            :key="water.key"
+            class="item-li"
+            @click="handleClick(water)">
+          <div class="item-li-avator">
+            <Icon type="stop"></Icon>
+          </div>
+          <p class="item-li-text">{{water.value}}</p>
+          <div class="item-li-icon">
+            <Icon type="chevron-right"></Icon>
+          </div>
+        </li>
+      </ul>
+      <h4 class="rainwater-title">雨情</h4>
+      <ul>
+        <li v-for="rain in rainList"
+            :key="rain.key"
+            class="item-li"
+            @click="handleClick(rain)">
+          <div class="item-li-avator">
+            <Icon type="stop"></Icon>
+          </div>
+          <p class="item-li-text">{{rain.value}}</p>
+          <div class="item-li-icon">
+            <Icon type="chevron-right"></Icon>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -55,7 +71,7 @@
         rainList: [
           {
             value: '山东省雨情',
-            key: 'sdssq',
+            key: 'sdsyq',
             type: 'rain'
           }
         ]
@@ -71,13 +87,58 @@
 </script>
 
 <style lang="less" type="text/less">
-
-
   .rainwater-wrapper {
+    ul {
+      padding: 0 8px;
+    }
+    .banner {
+      background-size: 100% 166px;
+      background-color: #eee;
+      background-image: url("../../common/image/banner.png");
+      background-repeat: no-repeat;
+      background-position: center center;
+      width: 100%;
+      height: 166px;
+      display: inline-block;
+    }
+    .rainwater-content {
+      margin-top: -2px;
+    }
     .item-li {
+      position: relative;
       height: 44px;
-      line-height: 44px;
+      padding-left: 52px;
       border-bottom: 1px solid #cccccc;
+      .item-li-avator {
+        position: absolute;
+        top: 5px;
+        left: 8px;
+        color: #bbbec4;
+        font-size: 34px;
+      }
+      .item-li-text {
+        font-weight: 500;
+        line-height: 44px;
+        font-size: 16px;
+      }
+      .item-li-icon {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        font-size: 18px;
+      }
+      &:last-child {
+        border-bottom: 1px solid transparent;
+      }
+    }
+    .rainwater-title {
+      height: 44px;
+      background: #3385ff;
+      color: #fff;
+      font-weight: 500;
+      line-height: 44px;
+      font-size: 16px;
+      text-align: center;
     }
   }
 </style>

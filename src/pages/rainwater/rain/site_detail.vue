@@ -1,11 +1,11 @@
 <template>
-  <div class="dphsq-wrapper">
+  <div class="sksq-wrapper">
     <div class="rainwater-title">
       <div @click="$router.back()">
         <Icon type="chevron-left"
               class="back-icon"></Icon>
       </div>
-      <h4>东平湖水情</h4>
+      <h4>{{name}}雨情</h4>
     </div>
     <div class="content">
       <Table border :loading="loading" :columns="columns" :data="list"></Table>
@@ -17,37 +17,35 @@
     mounted() {
       this._getList()
     },
+    props: {
+      id: String,
+      name: String,
+    },
     data() {
       return {
         columns: [
           {
-            title: '站名',
+            title: '站点名称',
             align:'center',
-            key: 'name'
+            key: 'name',
           },
           {
-            title: '平均水位',
+            title: '雨量',
             align:'center',
-            key: 'level'
+            key: 'value'
           },
-          {
-            title: '蓄水量（10^4 m^3）',
-            align:'center',
-            key: 'storage'
-          }
         ],
         list: [],
-        loading: true
+        loading: true,
       }
     },
     methods: {
       async _getList() {
-        let url = `https://api.internetware.cn/shuiwenju/?iw-apikey=123&iw-cmd=sqxx`
-        let type = '东平湖水情'
+        let url = `https://api.internetware.cn/shuiwenju/?iw-apikey=123&iw-cmd=yqxxxq&id=${this.id}`
         try {
           let res = await this.$get(url)
           if (res.rtnCode === '000000') {
-            this.list = this.serializaData(res.data[type])
+            this.list = this.serializaData(res.data.msg[0].data)
           }
         } catch (e) {
           console.log(e)
@@ -56,15 +54,13 @@
         }
       },
       serializaData(list) {
+        let result = []
         list.forEach(item => {
-          let itemObj = {
-            'name': item['站名'],
-            'level': item['平均水位'],
-            'storage': item['蓄水量(104m3)']
+          if (this.name === item.name) {
+            result = item.data
           }
-          Object.assign(item, {...itemObj})
         })
-        return list
+        return result
       }
     }
   }

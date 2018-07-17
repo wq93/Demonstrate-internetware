@@ -51,8 +51,6 @@ export const $get = (url, params, closeAlert = false) => {
     params,
     closeAlert,
     url: `${base}${url}`,
-    headers: {'yanphone-token': ''}
-
   });
 
 }

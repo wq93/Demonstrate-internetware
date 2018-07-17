@@ -1,5 +1,6 @@
 @import "./theme.less";
 @import "./mixin.less";
+
 body {
   font-size: 14px;
   color: @base-color;
@@ -36,6 +37,12 @@ ul, ol {
   text-align: left;
 }
 
+.content {
+  .ivu-table-cell {
+    text-align: center;
+  }
+}
+
 td.ivu-table-expanded-cell {
   padding: 15px 30px;
   background: @tr-extend;
@@ -53,7 +60,7 @@ td.ivu-table-expanded-cell {
   &.ivu-table-cell-expand-expanded {
     #transform-rotate(0);
   }
-  .ivu-icon{
+  .ivu-icon {
     background: @primary-color;
     color: @color;
     font-size: 12px;
@@ -66,7 +73,7 @@ td.ivu-table-expanded-cell {
 
 .ivu-table th {
   background-color: transparent;
-  height:50px;
+  height: 50px;
 }
 
 .ivu-table-cell {
@@ -90,9 +97,10 @@ td.ivu-table-expanded-cell {
 .ivu-table tbody td {
   border-bottom-width: 0px;
 }
+
 .ivu-table-row-highlight td,
 tr.ivu-table-row-hover td,
-tr.ivu-table-row-hover.ivu-table-row-highlight td{
+tr.ivu-table-row-hover.ivu-table-row-highlight td {
   background: @listHover;
 }
 
@@ -112,19 +120,23 @@ tr.ivu-table-row-hover.ivu-table-row-highlight td{
   font-size: 14px;
   color: @title-color;
 }
-.ivu-table th{
+
+.ivu-table th {
   height: 60px;
 }
 
 .ivu-form-item-content {
   font-size: 14px;
 }
-.ivu-input[disabled], fieldset[disabled] .ivu-input{
+
+.ivu-input[disabled], fieldset[disabled] .ivu-input {
   color: @disabled;
 }
-.ivu-radio-group-button .ivu-radio-wrapper-disabled.ivu-radio-wrapper-checked{
+
+.ivu-radio-group-button .ivu-radio-wrapper-disabled.ivu-radio-wrapper-checked {
   color: @disabled;
 }
+
 /*********************************关于开关**********************************************/
 
 .ivu-switch {
@@ -142,26 +154,30 @@ tr.ivu-table-row-hover.ivu-table-row-highlight td{
 }
 
 /*********************************关于模态框**********************************************/
-.ivu-modal-footer{
-  border-top:none;
+.ivu-modal-footer {
+  border-top: none;
   padding-bottom: 26px;
   padding-right: 32px;
 }
-.ivu-modal-header p, .ivu-modal-header-inner{
+
+.ivu-modal-header p, .ivu-modal-header-inner {
   font-size: 16px;
   color: @title-color;
   font-weight: normal;
 }
-.ivu-modal-body{
+
+.ivu-modal-body {
   font-size: 14px;
   padding: 16px 32px;
 }
-.ivu-modal-header{
+
+.ivu-modal-header {
   padding: 26px 32px;
 }
+
 /*********************************关于按钮**********************************************/
 
-.ivu-btn-ghost{
+.ivu-btn-ghost {
   color: #f5c06c;
   background-color: transparent;
   border-color: #f5c06c;
