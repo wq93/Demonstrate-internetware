@@ -1,6 +1,22 @@
 import router from '../../router/index'
 import Vue from 'vue'
 import {codeMessage, period} from './config.js'
+import $ from 'jquery'
+
+export function $ajax_get(url) {
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url,
+      type: "GET",
+      success: (res) => {
+        resolve(res)
+      },
+      error: (error) => {
+        reject(error)
+      }
+    })
+  })
+}
 
 export function formatDate(date, fmt) {
   if (/(y+)/.test(fmt)) {
@@ -29,16 +45,18 @@ export function formatDate(date, fmt) {
 
 //标准时间格式转成 yyyy-MM-dd HH:mm:ss
 export function timeFormat(date) {
-  let year=date.getFullYear();
-  let mon=date.getMonth()+1;
-  let day=date.getDate();
-  let hours=date.getHours();
-  let min=date.getMinutes();
-  let sec=date.getSeconds();
-  let dateTime=`${year}-${zeroFill(mon)}-${zeroFill(day)} ${zeroFill(hours)}:${zeroFill(min)}:${zeroFill(sec)}`;
-  function zeroFill(num){
-    return num<10 ?`0${num}`:num
+  let year = date.getFullYear();
+  let mon = date.getMonth() + 1;
+  let day = date.getDate();
+  let hours = date.getHours();
+  let min = date.getMinutes();
+  let sec = date.getSeconds();
+  let dateTime = `${year}-${zeroFill(mon)}-${zeroFill(day)} ${zeroFill(hours)}:${zeroFill(min)}:${zeroFill(sec)}`;
+
+  function zeroFill(num) {
+    return num < 10 ? `0${num}` : num
   }
+
   return dateTime
 }
 
@@ -49,7 +67,7 @@ export function numToQfh(s, n) {
    * s：要格式化的数字
    * n：保留几位小数 0代表整数
    * */
-  n = n > 0 ?n : 0;
+  n = n > 0 ? n : 0;
   s = parseFloat((s + "").replace(/[^\d\.-]/g, "")).toFixed(n) + "";
   var l = s.split(".")[0].split("").reverse();
   var r = s.split(".")[1];
@@ -57,16 +75,16 @@ export function numToQfh(s, n) {
   for (var i = 0; i < l.length; i++) {
     t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");
   }
-  return n>0 ? t.split("").reverse().join("") + "." + r : t.split("").reverse().join("");
+  return n > 0 ? t.split("").reverse().join("") + "." + r : t.split("").reverse().join("");
 }
 
 export function errorAlert(data) {
   let message = codeMessage.default;
   try {
-    if(data.code){
-      if(data.code===25100){
-        message=`登录错误次数过多,请${data.message}分钟后重试`
-      }else if( codeMessage[data.code]) {
+    if (data.code) {
+      if (data.code === 25100) {
+        message = `登录错误次数过多,请${data.message}分钟后重试`
+      } else if (codeMessage[data.code]) {
         message = codeMessage[data.code];
       }
     }

@@ -69,7 +69,7 @@
         let url = `https://api.internetware.cn/shuiwenju/?iw-apikey=123&iw-cmd=sqxx`
         let type = '水库水情'
         try {
-          let res = await this.$get(url)
+          let res = await this.$ajax_get(url)
           if (res.rtnCode === '000000') {
             this.list = this.serializaData(res.data[type])
           }
