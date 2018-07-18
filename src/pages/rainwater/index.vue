@@ -33,6 +33,7 @@
         </li>
       </ul>
     </div>
+    <div class="rainwater-footer">燕云移动化支持</div>
   </div>
 </template>
 
@@ -148,6 +149,12 @@
       font-weight: 500;
       line-height: 44px;
       font-size: 16px;
+      text-align: center;
+    }
+    .rainwater-footer {
+      position: absolute;
+      width: 100%;
+      bottom: 20px;
       text-align: center;
     }
   }

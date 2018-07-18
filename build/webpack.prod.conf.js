@@ -72,8 +72,8 @@ const webpackConfig = merge(baseWebpackConfig, {
         ? {safe: true, map: {inline: false}}
         : {safe: true}
     }),
-    // generate dist index.html with correct asset hash for caching.
-    // you can customize output by editing /index.html
+    // generate dist index2.html with correct asset hash for caching.
+    // you can customize output by editing /index2.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: config.build.index,

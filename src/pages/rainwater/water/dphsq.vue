@@ -38,12 +38,13 @@
           },
           {
             title: '平均水位',
-            width:120,
+            width: 120,
             align: 'center',
             key: 'level'
           },
           {
             title: '蓄水量（10^4 m^3）',
+            width: 140,
             align: 'center',
             key: 'storage'
           }

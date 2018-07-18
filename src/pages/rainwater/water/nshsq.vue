@@ -41,6 +41,7 @@
           },
           {
             title: '蓄水量（10^4 m^3）',
+            width: 140,
             align: 'center',
             key: 'storage'
           }

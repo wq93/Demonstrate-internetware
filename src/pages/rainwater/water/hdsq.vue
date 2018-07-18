@@ -51,6 +51,7 @@
           },
           {
             title: '时间',
+            width: 85,
             className: 'noRightBorder',
             align: 'center',
             key: 'time'

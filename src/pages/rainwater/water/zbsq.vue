@@ -8,7 +8,8 @@
       <h4>闸坝水情</h4>
     </div>
     <div class="content">
-      <Table border stripe disabled-hover :height="tableHeight" :loading="loading" :columns="columns" :data="list"></Table>
+      <Table border stripe disabled-hover :height="tableHeight" :loading="loading" :columns="columns"
+             :data="list"></Table>
     </div>
   </div>
 </template>
@@ -38,26 +39,29 @@
             children: [
               {
                 title: '闸上',
+                width: 50,
                 key: 'levelTop',
-                width: 60,
                 align: 'center',
               },
               {
                 title: '闸下',
+                width: 50,
                 key: 'levelBottom',
-                width: 60,
                 align: 'center',
               }
             ]
           },
           {
-            title: '流量（m^3）',
+            title: '流量(m^3)',
+            width: 42,
+            className: 'lh22',
             key: 'flow',
             align: 'center',
           },
           {
             title: '时间',
             key: 'time',
+            width: 86,
             className: 'noRightBorder',
             align: 'center',
           }
@@ -103,6 +107,9 @@
       th:last-child {
         border-right: 1px solid transparent;
       }
+    }
+    .lh22 {
+      line-height: 22px;
     }
   }
 </style>

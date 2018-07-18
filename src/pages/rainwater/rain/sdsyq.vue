@@ -68,6 +68,7 @@
           },
           {
             title: '最大点雨量(mm)',
+            width:85,
             align: 'center',
             className: 'noRightBorder',
             key: 'maxRainfall'
