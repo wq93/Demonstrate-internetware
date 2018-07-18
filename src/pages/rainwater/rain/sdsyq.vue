@@ -1,5 +1,5 @@
 <template>
-  <div class="sksq-wrapper">
+  <div class="sdsyq-wrapper">
     <div class="rainwater-title">
       <div @click="$router.back()">
         <Icon type="chevron-left"
@@ -8,29 +8,38 @@
       <h4>山东雨情</h4>
     </div>
     <div class="content">
-      <Table border :loading="loading" :columns="columns" :data="list"></Table>
+      <Table border :height="tableHeight" :loading="loading" :columns="columns" :data="list"></Table>
     </div>
   </div>
 </template>
 <script>
   export default {
     mounted() {
+      let offsetHeight = document.documentElement.clientHeight
+      this.tableHeight = (offsetHeight - 44)
+      window.onresize = () => {
+        offsetHeight = document.documentElement.clientHeight
+        this.tableHeight = (offsetHeight - 44)
+      }
       this._getList()
     },
     data() {
       return {
+        tableHeight: 0,
         columns: [
           {
             title: '政区名称',
             key: 'name',
-            align:'center',
+            align: 'center',
             render: (h, params) => {
               let {id, name} = params.row
               let href = ''
+              let className = ''
               if (id) {
                 href = `#/rainwater/rain/area/${id}/${encodeURI(name)}`
               } else {
                 href = `javascript:void(0);`
+                className = 'normal'
               }
               return h('div', [
                 h('a', {
@@ -40,7 +49,7 @@
                   },
                   domProps: {
                     href,
-                    className: ``,
+                    className,
                     title: name
                   },
                 }, name),
@@ -49,17 +58,18 @@
           },
           {
             title: '平均雨量(mm)',
-            align:'center',
+            align: 'center',
             key: 'rainfall'
           },
           {
             title: '最大点雨量站',
-            align:'center',
+            align: 'center',
             key: 'maxRainfallStation'
           },
           {
             title: '最大点雨量(mm)',
-            align:'center',
+            align: 'center',
+            className: 'noRightBorder',
             key: 'maxRainfall'
           }
         ],
@@ -96,3 +106,18 @@
     }
   }
 </script>
+<style lang="less" type="text/less">
+  .sdsyq-wrapper {
+    .normal {
+      font-size: 14px;
+      font-weight: normal;
+      color: rgba(0, 0, 0, 0.65);
+    }
+    .normal:link, a:visited {
+      text-decoration: none;
+    }
+    thead tr th:last-child {
+      border-right: 1px solid transparent;
+    }
+  }
+</style>

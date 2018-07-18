@@ -1,5 +1,5 @@
 <template>
-  <div class="sksq-wrapper">
+  <div class="site-detail-wrapper">
     <div class="rainwater-title">
       <div @click="$router.back()">
         <Icon type="chevron-left"
@@ -8,13 +8,19 @@
       <h4>{{name}}雨情</h4>
     </div>
     <div class="content">
-      <Table border :loading="loading" :columns="columns" :data="list"></Table>
+      <Table border :height="tableHeight" :loading="loading" :columns="columns" :data="list"></Table>
     </div>
   </div>
 </template>
 <script>
   export default {
     mounted() {
+      let offsetHeight = document.documentElement.clientHeight
+      this.tableHeight = (offsetHeight - 44)
+      window.onresize = () => {
+        offsetHeight = document.documentElement.clientHeight
+        this.tableHeight = (offsetHeight - 44)
+      }
       this._getList()
     },
     props: {
@@ -23,15 +29,17 @@
     },
     data() {
       return {
+        tableHeight: 0,
         columns: [
           {
             title: '站点名称',
-            align:'center',
+            align: 'center',
             key: 'name',
           },
           {
             title: '雨量',
-            align:'center',
+            align: 'center',
+            className: 'noRightBorder',
             key: 'value'
           },
         ],
@@ -65,3 +73,10 @@
     }
   }
 </script>
+<style lang="less" type="text/less">
+  .site-detail-wrapper {
+    thead tr th:last-child {
+      border-right: 1px solid transparent;
+    }
+  }
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="sksq-wrapper">
+  <div class="zbsq-wrapper">
     <div class="rainwater-title">
       <div @click="$router.back()">
         <Icon type="chevron-left"
@@ -8,17 +8,24 @@
       <h4>闸坝水情</h4>
     </div>
     <div class="content">
-      <Table border :loading="loading" :columns="columns" :data="list"></Table>
+      <Table border :height="tableHeight" :loading="loading" :columns="columns" :data="list"></Table>
     </div>
   </div>
 </template>
 <script>
   export default {
     mounted() {
+      let offsetHeight = document.documentElement.clientHeight
+      this.tableHeight = (offsetHeight - 44)
+      window.onresize = () => {
+        offsetHeight = document.documentElement.clientHeight
+        this.tableHeight = (offsetHeight - 44)
+      }
       this._getList()
     },
     data() {
       return {
+        tableHeight: 0,
         columns: [
           {
             title: '水文站',
@@ -51,6 +58,7 @@
           {
             title: '时间',
             key: 'time',
+            className: 'noRightBorder',
             align: 'center',
           }
         ],
@@ -89,3 +97,12 @@
     }
   }
 </script>
+<style lang="less" type="text/less">
+  .zbsq-wrapper {
+    thead tr:first-child {
+      th:last-child {
+        border-right: 1px solid transparent;
+      }
+    }
+  }
+</style>

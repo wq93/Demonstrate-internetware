@@ -8,31 +8,40 @@
       <h4>南四湖水情</h4>
     </div>
     <div class="content">
-      <Table border :loading="loading" :columns="columns" :data="list"></Table>
+      <Table border :loading="loading" :columns="columns"
+             :height="tableHeight"
+             :data="list"></Table>
     </div>
   </div>
 </template>
 <script>
   export default {
     mounted() {
+      let offsetHeight = document.documentElement.clientHeight
+      this.tableHeight = (offsetHeight - 44)
+      window.onresize = () => {
+        offsetHeight = document.documentElement.clientHeight
+        this.tableHeight = (offsetHeight - 44)
+      }
       this._getList()
     },
     data() {
       return {
+        tableHeight: 0,
         columns: [
           {
             title: '站名',
-            align:'center',
+            align: 'center',
             key: 'name'
           },
           {
             title: '平均水位',
-            align:'center',
+            align: 'center',
             key: 'level'
           },
           {
             title: '蓄水量（10^4 m^3）',
-            align:'center',
+            align: 'center',
             key: 'storage'
           }
         ],
@@ -69,3 +78,10 @@
     }
   }
 </script>
+<style lang="less" type="text/less">
+  .nshsq-wrapper {
+    thead tr th:last-child {
+      border-right: 1px solid transparent;
+    }
+  }
+</style>

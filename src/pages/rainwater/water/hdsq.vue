@@ -8,41 +8,51 @@
       <h4>河道水情</h4>
     </div>
     <div class="content">
-      <Table border :loading="loading" :columns="columns" :data="list"></Table>
+      <Table border :loading="loading"
+             :height="tableHeight"
+             :columns="columns" :data="list"></Table>
     </div>
   </div>
 </template>
 <script>
   export default {
     mounted() {
+      let offsetHeight = document.documentElement.clientHeight
+      this.tableHeight = (offsetHeight - 44)
+      window.onresize = () => {
+        offsetHeight = document.documentElement.clientHeight
+        this.tableHeight = (offsetHeight - 44)
+      }
       this._getList()
     },
     data() {
       return {
+        tableHeight: 0,
         columns: [
           {
             title: '河名',
-            align:'center',
+            align: 'center',
             key: 'name'
           },
           {
             title: '水文站',
-            align:'center',
+            align: 'center',
             key: 'station'
           },
           {
             title: '水位(m)',
-            align:'center',
+            align: 'center',
             key: 'level'
           },
           {
             title: '流量(m3/s)',
-            align:'center',
+            align: 'center',
             key: 'flow'
           },
           {
             title: '时间',
-            align:'center',
+            className: 'noRightBorder',
+            align: 'center',
             key: 'time'
           }
         ],
@@ -81,3 +91,10 @@
     }
   }
 </script>
+<style lang="less" type="text/less">
+  .hdsq-wrapper {
+    thead tr th:last-child {
+      border-right: 1px solid transparent;
+    }
+  }
+</style>

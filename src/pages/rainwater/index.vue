@@ -92,17 +92,17 @@
       padding: 0 8px;
     }
     .banner {
-      background-size: 100% 166px;
+      background-size: 100% 105px;
       background-color: #eee;
       background-image: url("../../common/image/banner.png");
       background-repeat: no-repeat;
       background-position: center center;
       width: 100%;
-      height: 166px;
+      height: 105px;
       display: inline-block;
     }
     .rainwater-content {
-      margin-top: -2px;
+      margin-top: -3px;
     }
     .item-li {
       position: relative;
@@ -126,6 +126,7 @@
         top: 12px;
         right: 12px;
         font-size: 18px;
+        color: #bbbec4;
       }
       &:last-child {
         border-bottom: 1px solid transparent;

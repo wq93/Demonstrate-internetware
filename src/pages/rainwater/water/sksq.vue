@@ -8,13 +8,19 @@
       <h4>水库水情</h4>
     </div>
     <div class="content">
-      <Table border :loading="loading" :columns="columns" :data="list"></Table>
+      <Table border :loading="loading" :columns="columns" :data="list" :height="tableHeight"></Table>
     </div>
   </div>
 </template>
 <script>
   export default {
     mounted() {
+      let offsetHeight = document.documentElement.clientHeight
+      this.tableHeight = (offsetHeight - 44)
+      window.onresize = () => {
+        offsetHeight = document.documentElement.clientHeight
+        this.tableHeight = (offsetHeight - 44)
+      }
       this._getList()
     },
     data() {
@@ -49,11 +55,13 @@
           {
             title: '超限座数',
             key: 'oversizedSeat',
+            className: 'noRightBorder',
             align: 'center',
           }
         ],
         list: [],
-        loading: true
+        loading: true,
+        tableHeight: 0
       }
     },
     methods: {
@@ -87,3 +95,12 @@
     }
   }
 </script>
+<style lang="less" type="text/less">
+  .sksq-wrapper {
+    thead tr:first-child {
+      th:last-child {
+        border-right: 1px solid transparent;
+      }
+    }
+  }
+</style>
