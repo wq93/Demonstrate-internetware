@@ -1,6 +1,6 @@
 <template>
   <div class="rainwater-wrapper">
-    <div class="banner"></div>
+    <div class="banner" :style="{height: svgHeight}"></div>
     <div class="rainwater-content">
       <h4 class="rainwater-title">水情</h4>
       <ul>
@@ -41,6 +41,7 @@
     name: "index",
     data() {
       return {
+        svgHeight: '',
         waterList: [
           {
             value: '水库水情',
@@ -77,6 +78,14 @@
         ]
       }
     },
+    mounted() {
+      let clientWidth = document.documentElement.clientWidth
+      this.svgHeight = (clientWidth / 1080) * 180 + 'px'
+      window.onresize = () => {
+        clientWidth = document.documentElement.clientWidth
+        this.svgHeight = (clientWidth / 1080) * 180 + 'px'
+      }
+    },
     methods: {
       handleClick(water) {
         let {type, key} = water
@@ -92,9 +101,9 @@
       padding: 0 8px;
     }
     .banner {
-      background-size: 100% 105px;
+      background-size: 100% 100%;
       background-color: #eee;
-      background-image: url("../../common/image/banner.png");
+      background-image: url("../../common/image/banner-svg.svg");
       background-repeat: no-repeat;
       background-position: center center;
       width: 100%;

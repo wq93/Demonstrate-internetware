@@ -8,7 +8,7 @@
       <h4>水库水情</h4>
     </div>
     <div class="content">
-      <Table border :loading="loading" :columns="columns" :data="list" :height="tableHeight"></Table>
+      <Table border stripe disabled-hover :loading="loading" :columns="columns" :data="list" :height="tableHeight"></Table>
     </div>
   </div>
 </template>

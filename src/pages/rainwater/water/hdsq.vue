@@ -8,7 +8,7 @@
       <h4>河道水情</h4>
     </div>
     <div class="content">
-      <Table border :loading="loading"
+      <Table border :loading="loading" stripe disabled-hover
              :height="tableHeight"
              :columns="columns" :data="list"></Table>
     </div>

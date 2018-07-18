@@ -8,7 +8,7 @@
       <h4>东平湖水情</h4>
     </div>
     <div class="content">
-      <Table border
+      <Table border stripe disabled-hover
              :loading="loading"
              :columns="columns"
              :data="list"

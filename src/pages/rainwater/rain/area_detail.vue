@@ -10,7 +10,7 @@
     <div class="content">
       <h6 class="total-title">全市降雨量统计(单位：mm)</h6>
       <p class="total-overview">{{overview}}</p>
-      <Table border :height="tableHeight" :loading="loading" :columns="columns" :data="list"></Table>
+      <Table border stripe disabled-hover :height="tableHeight" :loading="loading" :columns="columns" :data="list"></Table>
     </div>
   </div>
 </template>
