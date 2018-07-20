@@ -77,7 +77,7 @@
     methods: {
       async _getList() {
         this.list = []
-        let url = `https://api.internetware.cn/shuiwenju/?iw-apikey=123&iw-cmd=yqxxxq&id=${this.id}`
+        let url = `http://39.104.175.8/shuiwenju/?iw-apikey=123&iw-cmd=yqxxxq&id=${this.id}`
         try {
           let res = await this.$ajax_get(url)
           if (res.rtnCode === '000000') {

@@ -66,7 +66,7 @@
     },
     methods: {
       async _getList() {
-        let url = `https://api.internetware.cn/shuiwenju/?iw-apikey=123&iw-cmd=sqxx`
+        let url = `http://39.104.175.8/shuiwenju/?iw-apikey=123&iw-cmd=sqxx`
         let type = '水库水情'
         try {
           let res = await this.$ajax_get(url)
